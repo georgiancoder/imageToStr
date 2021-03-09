@@ -7,11 +7,29 @@ const strCtx = strCanvas.getContext('2d');
 const vid = document.querySelector('#vid');
 
 vid.onplay = () => {
-	canvas.width = vid.clientWidth * 0.4;
-	canvas.height = vid.clientHeight * 0.4;
+	canvas.width = vid.clientWidth * 0.2;
+	canvas.height = vid.clientHeight * 0.2;
 	loop();
 
 }
+
+
+var constraints = { audio: false, video: { width: 500, height: 300 } };
+
+
+navigator.mediaDevices.getUserMedia(constraints).then(
+	(mediaStream) => {
+		vid.srcObject = mediaStream;
+	}
+).catch(error => {
+	console.log(error);
+})
+
+
+vid.addEventListener('loadeddata', () => {
+	vid.play();
+});
+
 
 function loop() {
 	if (!vid.paused && !vid.ended) {
@@ -66,7 +84,7 @@ function drawByStr(data){
 	strCanvas.width = meassureText(data[0].length, symbol);
 	strCanvas.height = data.length * 11.9;
 	strCtx.clearRect(0, 0, strCanvas.width, strCanvas.height);
-	strCtx.fillStyle = 'white';
+	strCtx.fillStyle = 'black';
 	strCtx.fillRect(0,0,strCanvas.width, strCanvas.height);
 	const symbolWidth = meassureText(1,symbol);
 	data.forEach((row, rowIndex) => {
